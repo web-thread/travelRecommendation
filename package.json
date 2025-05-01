@@ -19,6 +19,6 @@
   },
   "homepage": "https://github.com/web-thread/travelRecommendation#readme",
   "devDependencies": {
-    "vite": "^6.3.3"
+    "vite": "^6.3.4"
   }
 }

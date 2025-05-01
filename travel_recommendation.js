@@ -32,34 +32,30 @@ function searchKeyword() {
           results = data.beaches;
         } else if (keyword === 'temple' || keyword === 'temples') {
           results = data.temples;
-        } else {
-          // Look for matching country
-          const countryMatch = data.countries.find(c =>
-            c.name.toLowerCase() === keyword
-          );
-          if (countryMatch) {
-            results = countryMatch.cities;
+        } else if (keyword === 'country' || keyword === 'countries') {
+          for (const country of data.countries) {
+            results.push(...country.cities);
           }
         }
       
         if (results.length === 0) {
-          result.innerHTML = `<p><strong>No results found</strong>. <br>Try 'beach', 'temple', or a country like 'Japan'.</p>`;
+          result.innerHTML = `<p><strong>No results found</strong>. <br>Try 'beach', 'temple' or 'country'.</p>`;
           return;
+        } else{
+          results.forEach(place => {
+            options.timeZone = place.timezone;
+            let placeTime = new Date().toLocaleTimeString('en-US', options);
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+              <img src="${place.imageUrl}" alt="${place.name}">
+              <h3>${place.name}</h3>
+              <span class="time">Current time: ${placeTime}</span>
+              <p>${place.description}</p>
+            `;
+            result.appendChild(card);
+          });
         }
-
-        results.forEach(place => {
-          options.timeZone = place.timezone;
-          let placeTime = new Date().toLocaleTimeString('en-US', options);
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `
-            <img src="${place.imageUrl}" alt="${place.name}">
-            <h3>${place.name}</h3>
-            <span class="time">Current time: ${placeTime}</span>
-            <p>${place.description}</p>
-          `;
-          result.appendChild(card);
-        });
 
       })
       .catch(error => {
@@ -83,3 +79,14 @@ btnReset.addEventListener('click', () => {
   btnSearch.disabled = true;
   btnReset.disabled = true;
 });
+
+
+const submitButton = document.getElementById('submitBtn');
+const form = document.getElementById('myForm');
+
+if(form){
+  submitButton.addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    window.alert('Thank you for contacting us!');
+  });
+}
